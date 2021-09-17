@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\FileSystem.cs" />
+    <Compile Include="src\XmlUtil.cs" />
     <Compile Include="TestEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
