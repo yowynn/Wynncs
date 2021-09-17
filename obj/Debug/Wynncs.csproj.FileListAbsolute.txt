@@ -1,0 +1,6 @@
+P:\MINE\Wynncs\bin\Debug\ClassLibrary.dll
+P:\MINE\Wynncs\bin\Debug\ClassLibrary.pdb
+P:\MINE\Wynncs\obj\Debug\Wynncs.csproj.AssemblyReference.cache
+P:\MINE\Wynncs\obj\Debug\Wynncs.csproj.CoreCompileInputs.cache
+P:\MINE\Wynncs\obj\Debug\ClassLibrary.dll
+P:\MINE\Wynncs\obj\Debug\ClassLibrary.pdb
