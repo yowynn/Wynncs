@@ -85,6 +85,7 @@
     <Folder Include=".git\refs\tags\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entry\CubicBezier.cs" />
     <Compile Include="Util\FileSystem.cs" />
     <Compile Include="Util\XmlUtil.cs" />
     <Compile Include="TestEntry.cs" />
