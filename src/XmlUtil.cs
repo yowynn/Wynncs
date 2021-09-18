@@ -10,6 +10,12 @@ namespace Wynncs
 {
     public class XmlUtil
     {
+        /// <summary>
+        /// 打开一个 XML 文档（或空文档）
+        /// </summary>
+        /// <param name="filePath">完整路径</param>
+        /// <param name="nullIfNotExist">为 False，则在打开文档失败时新建一个空白文档</param>
+        /// <returns>XML文档</returns>
         public static XmlDocument Open(string filePath = "", bool nullIfNotExist = false)
         {
            XmlDocument doc = new XmlDocument();
@@ -24,21 +30,46 @@ namespace Wynncs
             }
         }
 
+        /// <summary>
+        /// 获取子元素
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="elementName">子元素名</param>
+        /// <returns>子元素</returns>
         public static XmlElement GetElement(XmlNode node, string elementName)
         {
             return node?[elementName];
         }
 
+        /// <summary>
+        /// 获取子元素
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="elementIndex">子元素索引</param>
+        /// <returns>子元素</returns>
         public static XmlElement GetElement(XmlNode node, int elementIndex)
         {
             return node?.ChildNodes[elementIndex] as XmlElement;
         }
 
+        /// <summary>
+        /// 获取属性
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <returns>属性</returns>
         public static XmlAttribute GetAttribute(XmlNode node, string attrName)
         {
             return node?.Attributes?[attrName];
         }
 
+        /// <summary>
+        /// 获取属性值（string）
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <returns>属性值（string）</returns>
         public static string GetAttributeString(XmlNode node, string attrName,string defaultValue = "")
         {
             var attr = GetAttribute(node, attrName);
@@ -46,6 +77,13 @@ namespace Wynncs
             return value;
         }
 
+        /// <summary>
+        /// 获取属性值（int）
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <returns>属性值（int）</returns>
         public static int GetAttributeInt(XmlNode node, string attrName, int defaultValue = 0)
         {
             var attr = GetAttribute(node, attrName);
@@ -53,6 +91,13 @@ namespace Wynncs
             return value;
         }
 
+        /// <summary>
+        /// 获取属性值（float）
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <returns>属性值（float）</returns>
         public static float GetAttributeFloat(XmlNode node, string attrName, float defaultValue = 0f)
         {
             var attr = GetAttribute(node, attrName);
@@ -60,6 +105,13 @@ namespace Wynncs
             return value;
         }
 
+        /// <summary>
+        /// 获取属性值（double）
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <returns>属性值（double）</returns>
         public static double GetAttributeDouble(XmlNode node, string attrName, double defaultValue = 0d)
         {
             var attr = GetAttribute(node, attrName);
@@ -67,6 +119,13 @@ namespace Wynncs
             return value;
         }
 
+        /// <summary>
+        /// 获取属性值（bool）
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="defaultValue">默认值</param>
+        /// <returns>属性值（bool）</returns>
         public static bool GetAttributeBool(XmlNode node, string attrName, bool defaultValue = false)
         {
             var attr = GetAttribute(node, attrName);
@@ -74,6 +133,12 @@ namespace Wynncs
             return value;
         }
 
+        /// <summary>
+        /// 添加子元素（在末尾）
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="elementName">子元素名</param>
+        /// <returns>子元素</returns>
         public static XmlElement AddElement(XmlNode node, string elementName)
         {
             var doc = node as XmlDocument ?? node.OwnerDocument;
@@ -82,6 +147,35 @@ namespace Wynncs
             return element;
         }
 
+        /// <summary>
+        /// 添加子元素到对应位置
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="elementName">子元素名</param>
+        /// <param name="index">位置索引</param>
+        /// <returns>子元素</returns>
+        public static XmlElement AddElement(XmlNode node, string elementName, int index)
+        {
+            if (node.HasChildNodes && index < node.ChildNodes.Count)
+            {
+                var doc = node as XmlDocument ?? node.OwnerDocument;
+                XmlElement element = doc.CreateElement(elementName);
+                node.InsertBefore(element, node.ChildNodes[index]);
+                return element;
+            }
+            else
+            {
+                return AddElement(node, elementName);
+            }
+        }
+
+        /// <summary>
+        /// 设置属性值
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="attrValue">属性值</param>
+        /// <returns>属性</returns>
         public static XmlAttribute SetAttribute(XmlNode node, string attrName, ValueType attrValue)
         {
             var doc = node as XmlDocument ?? node.OwnerDocument;
@@ -91,6 +185,13 @@ namespace Wynncs
             return attr;
         }
 
+        /// <summary>
+        /// 设置属性值
+        /// </summary>
+        /// <param name="node">参照节点</param>
+        /// <param name="attrName">属性名</param>
+        /// <param name="attrValue">属性值</param>
+        /// <returns>属性</returns>
         public static XmlAttribute SetAttribute(XmlNode node, string attrName, string attrValue = "")
         {
             var doc = node as XmlDocument ?? node.OwnerDocument;
@@ -100,6 +201,11 @@ namespace Wynncs
             return attr;
         }
 
+        /// <summary>
+        /// 统计XML节点数量和引用结构
+        /// </summary>
+        /// <param name="sourse">要统计的节点</param>
+        /// <param name="log">要记录到的 XML 文档</param>
         public static void Statistics(XmlNode sourse, XmlDocument log)
         {
             var root = GetElement(log, "Elements") ?? AddElement(log, "Elements");
@@ -138,6 +244,12 @@ namespace Wynncs
             }
         }
 
+        /// <summary>
+        /// 统计XML节点数量和引用结构
+        /// </summary>
+        /// <param name="sourseFilePath">要统计的 XML 文件完整路径</param>
+        /// <param name="logFilePath">统计结果输出到的 XML 文件路径</param>
+        /// <param name="isAppend">是否累加到原输出文件上</param>
         public static void Statistics(string sourseFilePath, string logFilePath, bool isAppend = false)
         {
             Directory.CreateDirectory(Path.GetFullPath(Path.GetDirectoryName(logFilePath)));
