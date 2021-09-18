@@ -2,7 +2,7 @@
 using System.Xml;
 using System.IO;
 
-namespace Wynncs
+namespace Wynncs.Util
 {
     public class XmlUtil
     {

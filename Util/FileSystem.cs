@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Wynncs
+namespace Wynncs.Util
 {
     public class FileSystem
     {
