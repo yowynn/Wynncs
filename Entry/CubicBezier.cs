@@ -245,7 +245,7 @@ namespace Wynncs.Entry
         /// <param name="presetName">预设名</param>
         /// <param name="bezier">输出值</param>
         /// <returns>是否正确获取</returns>
-        public bool GetPreset(string presetName, out CubicBezier bezier)
+        public static bool GetPreset(string presetName, out CubicBezier bezier)
         {
             switch (presetName)
             {
