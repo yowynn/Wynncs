@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Wynncs.Util;
+using Wynncs.Entry;
 
 namespace Wynncs
 {
@@ -12,8 +13,15 @@ namespace Wynncs
         public static void Main()
         {
             //Console.WriteLine(Path.GetExtension("a/b/c/v"));
-            XmlUtil.Statistics(@"C:\Users\Wynn\Desktop\book\story_0036\cocosstudio\scenes\story\0036\content\layout\page_1\p01.csd", "in/out.xml");
-            XmlUtil.Statistics(@"C:\Users\Wynn\Desktop\book\story_0036\cocosstudio\scenes\story\0036\content\layout\page_1\s0036_h001_konglong_0.csi", "in/out.xml", true);
+            var count = 100;
+            var dis = 1f / count;
+            CubicBezier b = CubicBezier.EaseInOutBack;
+            for (int i = 0; i <= count; i++)
+            {
+                var x = dis * i;
+                //Console.WriteLine($"{x}\t{b.Lerp(x)}\t{b.SolveT(x)}");
+                Console.WriteLine($"{x}\t{b.Lerp(x)}");
+            }
 
 
             Console.ReadKey();

@@ -52,6 +52,163 @@ namespace Wynncs.Entry
             this.y2 = (float)y2;
         }
 
+        private static float FAST_CBRT(float x)
+        {
+            return (float)(((x) < 0) ? -Math.Exp(Math.Log(-(x)) / 3.0f) : Math.Exp(Math.Log(x) / 3.0f));
+        }
+
+        private static void CHECK_CUBIC(float val, string err = "ERROR")
+        {
+            if (val < 0 || val > 1)
+            {
+                throw new Exception(err);
+            }
+        }
+
+        public float SolveT(float x)
+        {
+            CHECK_CUBIC(x);
+            var d = -x;
+            var c = x1 * 3f;
+            var b = x2 * 3f - c - c;
+            var a = 1f - b - c;
+
+            float t;
+            if (a != 0)
+            {
+                // Solution of a t^3 + b t^2 + c t + d = 0 :
+                // https://math.stackexchange.com/questions/1908861/using-trig-identity-to-solve-a-cubic-equation
+                // let x = A*cos t + B
+                float p = -b / (3.0F * a);
+                float p2 = p * p;
+                float p3 = p2 * p;
+
+                float q = p3 + (b * c - 3.0F * a * d) / (6.0F * a * a);
+                float q2 = q * q;
+
+                float r = c / (3.0F * a);
+                float rmp2 = r - p2;
+
+                float s = q2 + rmp2 * rmp2 * rmp2;
+
+                if (s < 0.0F)
+                {
+                    float ssi = (float)Math.Sqrt(-s);
+                    float r_1 = (float)Math.Sqrt(-s + q2);
+                    float phi = (float)Math.Atan2(ssi, q);
+
+                    float r_3 = FAST_CBRT(r_1);
+                    float phi_3 = phi / 3.0F;
+
+                    // Extract cubic roots.
+                    float u1 = 2.0F * r_3 * (float)Math.Cos(phi_3) + p;
+                    float u2 = 2.0F * r_3 * (float)Math.Cos(phi_3 + 2.0F * (float)Math.PI / 3.0f) + p;
+                    float u3 = 2.0F * r_3 * (float)Math.Cos(phi_3 - 2.0F * (float)Math.PI / 3.0f) + p;
+
+                    if (u1 >= 0.0F && u1 <= 1.0F)
+                    {
+                        return u1;
+                    }
+                    else if (u2 >= 0.0F && u2 <= 1.0F)
+                    {
+                        return u2;
+                    }
+                    else if (u3 >= 0.0F && u3 <= 1.0F)
+                    {
+                        return u3;
+                    }
+                    else
+                    {
+                        // 应付精度带来的问题
+                        t = (x < 0.5F) ? 0.0F : 1.0F;
+                    }
+                }
+                else
+                {
+                    float ss = (float)Math.Sqrt(s);
+                    float u = FAST_CBRT(q + ss) + FAST_CBRT(q - ss) + p;
+
+                    if (u >= 0.0F && u <= 1.0F)
+                    {
+                        return u;
+                    }
+                    else
+                    {
+                        // 应付精度带来的问题
+                        t = (x < 0.5F) ? 0.0F : 1.0F;
+                    }
+                }
+            }
+            else if (b != 0)
+            {
+                // Solution of b t^2 + c t + d = 0 :
+                // t = ±(sqrt(c^2 - 4 b d) - c)/(2 b)
+                var exp1 = 2 * b;
+                var exp2 = c * c - 4 * b * d;
+                var exp3 = -c / exp1;
+                if (exp2 == 0)
+                {
+                    t = exp3;
+                }
+                else if (exp2 > 0)
+                {
+                    var exp4 = (float)Math.Sqrt(exp2) / exp1;
+                    var t1 = exp3 + exp4;
+                    var t2 = exp3 - exp4;
+                    if ((t1 < 0 || t1 > 1) && (t2 >= 0 || t2 <= 1)) t = t2;
+                    else if ((t2 < 0 || t2 > 1) && (t1 >= 0 || t1 <= 1)) t = t1;
+                    else
+                    {
+                        // 应付精度带来的问题
+                        t = (x < 0.5F) ? 0.0F : 1.0F;
+                    }
+                }
+                else
+                {
+                    // 应付精度带来的问题
+                    t = (x < 0.5F) ? 0.0F : 1.0F;
+                }
+            }
+            else if (c != 0)
+            {
+                // Solution c t + d = 0 :
+                // t = -d/c
+                t = -d / c;
+            }
+            else
+            {
+                throw new Exception("Why?-03");
+            }
+            return t;
+        }
+
+        public float SampleX(float t)
+        {
+            CHECK_CUBIC(t);
+            var c = x1 * 3f;
+            var b = x2 * 3f - c - c;
+            var a = 1f - b - c;
+            var x = ((a * t + b) * t + c) * t;
+            return x;
+        }
+
+        public float SampleY(float t)
+        {
+            CHECK_CUBIC(t);
+            var c = y1 * 3f;
+            var b = y2 * 3f - c - c;
+            var a = 1f - b - c;
+            var y = ((a * t + b) * t + c) * t;
+            return y;
+        }
+
+        public float Lerp(float x)
+        {
+            var t = SolveT(x);
+            var y = SampleY(t);
+            return y;
+        }
+
         /// <summary>
         /// 获取预设
         /// </summary>
