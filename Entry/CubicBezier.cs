@@ -22,10 +22,6 @@
 //   (0,0)└──────────────────────────────────┘
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Wynncs.Entry
 {
@@ -65,6 +61,11 @@ namespace Wynncs.Entry
             }
         }
 
+        /// <summary>
+        /// 根据 x 的值，算出所处的时间 t
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns>时间 t</returns>
         public float SolveT(float x)
         {
             CHECK_CUBIC(x);
@@ -182,6 +183,11 @@ namespace Wynncs.Entry
             return t;
         }
 
+        /// <summary>
+        /// 根据时间 t 算出 x 的采样值
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public float SampleX(float t)
         {
             CHECK_CUBIC(t);
@@ -192,6 +198,11 @@ namespace Wynncs.Entry
             return x;
         }
 
+        /// <summary>
+        /// 根据时间 t 算出 y 的采样值
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public float SampleY(float t)
         {
             CHECK_CUBIC(t);
@@ -202,11 +213,30 @@ namespace Wynncs.Entry
             return y;
         }
 
+        /// <summary>
+        /// 根据 x 的值算出 y 的插值
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public float Lerp(float x)
         {
+            CHECK_CUBIC(x);
             var t = SolveT(x);
             var y = SampleY(t);
             return y;
+        }
+
+        /// <summary>
+        /// 根据 x 的值算出 val1 到 val2 的插值
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public float Lerp(float val1, float val2, float x)
+        {
+            var y = Lerp(x);
+            return val1 + (val2 - val1) * y;
         }
 
         /// <summary>
